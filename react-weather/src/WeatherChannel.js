@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {fetchConditionData, fetchForecastData} from './api/weather';
+import {fetchConditionData, fetchForecastData,fetchWeatherData} from './api/weather';
 
 import CityCondition from './CityCondition';
 import Forecaster    from './Forecaster';
@@ -68,9 +68,18 @@ export default class WeatherChannel extends Component {
       }
     }
 
+    // onCityChange(name){
+    //     fetchConditionData(name, this.onConditionLoad.bind(this));
+    //     fetchForecastData(name,this.onForecastLoad.bind(this));
+    // }
+
     onCityChange(name){
-        fetchConditionData(name, this.onConditionLoad.bind(this));
-        fetchForecastData(name,this.onForecastLoad.bind(this));
+      fetchConditionData(name).then(data=>{
+        this.onConditionLoad(data);
+      })
+      fetchForecastData(name).then(data=>{
+        this.onForecastLoad(data)
+      })
     }
 
     tempUniteChange(){

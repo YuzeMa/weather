@@ -4,12 +4,8 @@ export default class Forecaster extends Component {
     constructor(props){
         super(props);
         this.state={
-            isFiveDays: true
+            displayDays: 5
         }
-    }
-
-    switchActive(){
-        this.setState({isFiveDays: !this.state.isFiveDays});
     }
 
     render(){
@@ -21,36 +17,35 @@ export default class Forecaster extends Component {
                 :
                 <div>
                     {
-                        (this.state.isFiveDays)?
+                        (this.state.displayDays === 5)?
                         <div className="forecast__switch">
                             <button className='forecast__switch_0 switch-active' >5 days</button>
-                            <button className='forecast__switch_1' onClick={this.switchActive.bind(this)}>10 days</button>
+                            <button className='forecast__switch_1' onClick={()=>this.setState({displayDays: 10})}>10 days</button> 
                         </div>
                         :
                         <div className="forecast__switch">
-                            <button className='forecast__switch_0' onClick={this.switchActive.bind(this)}>5 days</button>
+                            <button className='forecast__switch_0' onClick={()=>this.setState({displayDays: 5})}>5 days</button>
                             <button className='forecast__switch_1 switch-active'>10 days</button>
                         </div>
                     }
-                    <Weather days={this.props.days} isTempUnitC={this.props.isTempUnitC} isFiveDays={this.state.isFiveDays}/>
+                    <Weather days={this.props.days} isTempUnitC={this.props.isTempUnitC} displayDays={this.state.displayDays} />
                 </div>
                 }
             </div>
         );
     }
 }
+//must use function ref.  onClick={this.setState({displayDays: 5})} will only excute once when render the dom
 
 function Weather (props) {
     let rows = [];
+    let n = props.displayDays;
     let days = props.days;
     rows = days.map( day=>{ 
         return <WeatherDay day={day} isTempUnitC={props.isTempUnitC} key={day.id}/>;
     })
     return (
-        (props.isFiveDays)?
-       <div>{rows.slice(0,5)}</div>
-       :
-       <div>{rows}</div>
+       <div>{rows.slice(0,n)}</div>
     );
 }
 
